@@ -1,0 +1,112 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ─── Helpers ───────────────────────────────────────────────────────────
+    function isAuth() {
+      return request.auth != null;
+    }
+    
+    function isOwner(uid) {
+      return isAuth() && request.auth.uid == uid;
+    }
+    
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    function isAdmin() {
+      return isAuth() && getUserRole() in ['admin'];
+    }
+    
+    function isGerente() {
+      return isAuth() && getUserRole() in ['admin', 'gerente'];
+    }
+    
+    function isAtendente() {
+      return isAuth() && getUserRole() in ['admin', 'gerente', 'atendente'];
+    }
+    
+    function isEstoque() {
+      return isAuth() && getUserRole() in ['admin', 'gerente', 'estoque'];
+    }
+
+    // ─── USERS ────────────────────────────────────────────────────────────
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid) || isAdmin();
+      allow delete: if isAdmin();
+      
+      match /{subcollection=**} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // ─── PRODUCTS ─────────────────────────────────────────────────────────
+    match /products/{productId} {
+      allow read: if true; // Leitura pública para catálogo
+      allow create, update: if isAdmin() || isGerente() || isEstoque();
+      allow delete: if isAdmin();
+    }
+
+    // ─── ORDERS ───────────────────────────────────────────────────────────
+    match /orders/{orderId} {
+      allow create: if isAuth();
+      allow read: if isAuth() && (
+        resource.data.clienteUid == request.auth.uid || isAtendente()
+      );
+      allow update: if isAuth() && (
+        // Cliente pode cancelar próprio pedido pendente
+        (request.auth.uid == resource.data.clienteUid && 
+         request.resource.data.status == 'cancelado' && 
+         resource.data.status == 'pendente') ||
+        // Admin/gerente/atendente pode atualizar
+        isAtendente()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // ─── FINANCIAL ────────────────────────────────────────────────────────
+    match /financial/{docId} {
+      allow read: if isGerente();
+      allow write: if isGerente();
+    }
+
+    // ─── INVENTORY_MOVEMENTS ──────────────────────────────────────────────
+    match /inventory_movements/{docId} {
+      allow read: if isAdmin() || isGerente() || isEstoque();
+      allow create: if isAuth();
+    }
+
+    // ─── SUPPLIERS ────────────────────────────────────────────────────────
+    match /suppliers/{supplierId} {
+      allow read: if isAdmin() || isGerente() || isEstoque();
+      allow write: if isAdmin() || isGerente();
+    }
+
+    // ─── WHATSAPP_SESSIONS ────────────────────────────────────────────────
+    match /whatsapp_sessions/{phone} {
+      allow read, write: if request.auth == null || request.auth.token.admin == true;
+    }
+
+    // ─── SETTINGS ─────────────────────────────────────────────────────────
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── FCM TOKENS ───────────────────────────────────────────────────────
+    match /fcm_tokens/{tokenId} {
+      allow read: if isAdmin();
+      allow create: if isAuth();
+      allow delete: if isAuth();
+    }
+
+    // ─── REPORTS ──────────────────────────────────────────────────────────
+    match /reports/{reportId} {
+      allow read: if isGerente();
+      allow write: if false; // Apenas Functions
+    }
+  }
+}

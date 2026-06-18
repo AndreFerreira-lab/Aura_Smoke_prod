@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@bola/shared-types": ["packages/shared-types/src/index.ts"],
+      "@bola/shared-types/*": ["packages/shared-types/src/*"],
+      "@bola/firebase-config/client": ["packages/firebase-config/src/client.ts"],
+      "@bola/firebase-config/admin": ["packages/firebase-config/src/admin.ts"],
+      "@bola/firebase-config/*": ["packages/firebase-config/src/*"],
+      "@bola/ui-components": ["packages/ui-components/src/index.ts"],
+      "@bola/ui-components/*": ["packages/ui-components/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "build", ".turbo"]
+}

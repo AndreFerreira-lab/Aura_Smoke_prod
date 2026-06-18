@@ -1,0 +1,38 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+build
+.next
+.turbo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+firebase-debug.log*
+
+# Firebase
+.firebase
+firebase-debug.*.log
+auth/
+
+# Misc
+*.local
+.cache

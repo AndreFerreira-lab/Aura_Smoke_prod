@@ -1,0 +1,18 @@
+[build]
+  publish = "apps/client/dist"
+  command = "pnpm install --frozen-lockfile && pnpm --filter=@bola/client run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*.@(js|css)"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.@(jpg|jpeg|gif|png|svg|webp|ico)"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"

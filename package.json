@@ -1,0 +1,28 @@
+{
+  "name": "bola-ai-express",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "build:client": "turbo run build --filter=@bola/client",
+    "build:admin": "turbo run build --filter=@bola/admin",
+    "build:bot": "turbo run build --filter=@bola/whatsapp-bot",
+    "build:functions": "turbo run build --filter=@bola/functions",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md,css,html}\""
+  },
+  "devDependencies": {
+    "turbo": "^2.3.0",
+    "typescript": "^5.6.0",
+    "prettier": "^3.3.0",
+    "@types/node": "^22.0.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

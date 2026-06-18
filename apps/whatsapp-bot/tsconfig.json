@@ -1,0 +1,28 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "outDir": "dist",
+    "rootDir": "../..",
+    "noEmit": false,
+    "declaration": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@bola/shared-types": ["../../packages/shared-types/src/index.ts"],
+      "@bola/shared-types/*": ["../../packages/shared-types/src/*"],
+      "@bola/firebase-config/client": ["../../packages/firebase-config/src/client.ts"],
+      "@bola/firebase-config/admin": ["../../packages/firebase-config/src/admin.ts"],
+      "@bola/firebase-config/*": ["../../packages/firebase-config/src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

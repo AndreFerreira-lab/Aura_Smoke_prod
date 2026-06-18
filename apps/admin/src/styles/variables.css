@@ -1,0 +1,11 @@
+:root {
+  --font-sans: 'Poppins', 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+* { font-family: var(--font-sans); }
+html { scroll-behavior: smooth; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { @apply bg-muted; }
+::-webkit-scrollbar-thumb { @apply bg-muted-foreground/30 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-muted-foreground/50; }
